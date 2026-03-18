@@ -1,1 +1,25 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= title
+    link(rel="stylesheet" href="/css/style.css")
+  body
+    .container
+      h1 Integrating With HubSpot I Practicum
+      a.button(href="/update-cobj") Add to this table
 
+      if records.length
+        table
+          thead
+            tr
+              each property in customObjectProperties
+                th= property.label
+          tbody
+            each record in records
+              tr
+                each property in customObjectProperties
+                  td= record.properties[property.name] || ""
+      else
+        p No records found.
