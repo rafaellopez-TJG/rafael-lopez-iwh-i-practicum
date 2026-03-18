@@ -1,1 +1,19 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title= title
+    link(rel="stylesheet" href="/css/style.css")
+  body
+    .container
+      h1 Update Custom Object Form
+      a.link(href="/") Return to the homepage
 
+      form(action="/update-cobj" method="POST")
+        each property in customObjectProperties
+          .form-group
+            label(for=property.name)= property.label
+            input(type="text" id=property.name name=property.name required)
+
+        button(type="submit") Create Record
