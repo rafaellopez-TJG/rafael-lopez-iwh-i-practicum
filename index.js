@@ -5,6 +5,8 @@ const axios = require('axios');
 const path = require('path');
 const app = express();
 
+const PORT = process.env.PORT || 3000;
+
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -23,13 +25,17 @@ const customObjectProperties = [
   { name: 'favorite_toy', label: 'Favorite Toy' }
 ];
 
+if (!PRIVATE_APP_ACCESS || !HUBSPOT_OBJECT_TYPE) {
+  console.error('Missing HUBSPOT_ACCESS_TOKEN or HUBSPOT_OBJECT_TYPE in .env');
+  process.exit(1);
+}
+
 const headers = {
   Authorization: `Bearer ${PRIVATE_APP_ACCESS}`,
   'Content-Type': 'application/json'
 };
 
 // ROUTE 1 - Homepage
-// Gets custom object records and renders homepage.pug
 app.get('/', async (req, res) => {
   const endpoint = `https://api.hubapi.com/crm/v3/objects/${HUBSPOT_OBJECT_TYPE}`;
 
@@ -56,7 +62,6 @@ app.get('/', async (req, res) => {
 });
 
 // ROUTE 2 - Form page
-// Renders updates.pug
 app.get('/update-cobj', (req, res) => {
   res.render('updates', {
     title: 'Update Custom Object Form | Integrating With HubSpot I Practicum',
@@ -65,7 +70,6 @@ app.get('/update-cobj', (req, res) => {
 });
 
 // ROUTE 3 - Form submission
-// Creates a new custom object record, then redirects home
 app.post('/update-cobj', async (req, res) => {
   const endpoint = `https://api.hubapi.com/crm/v3/objects/${HUBSPOT_OBJECT_TYPE}`;
 
@@ -87,4 +91,4 @@ app.post('/update-cobj', async (req, res) => {
 });
 
 // Localhost
-app.listen(3000, () => console.log('Listening on http://localhost:3000'));
+app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
